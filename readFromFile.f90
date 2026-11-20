@@ -3,7 +3,7 @@ module filereader
    
    private
 
-   public lengthOfFile, readMatrixInt, readStringArray, readCSStringArray
+   public lengthOfFile, readMatrixInt, readStringArray, readCSStringArray, readLines
 contains
 
    subroutine lengthOfFile(nlines, filePath, lfp)
@@ -22,7 +22,6 @@ contains
 99    CLOSE (io)
    end subroutine lengthOfFile
 
-
    subroutine readMatrixInt(resMatrix, m, n, filePath, lfp)
       integer :: io
       integer, intent(in) :: m, n, lfp
@@ -34,6 +33,25 @@ contains
       close(io)
    end subroutine readMatrixInt
 
+   subroutine readLines(resArr, n, startLine, stopLine, filePath, lfp)
+      integer :: io, i
+      integer, intent(in) :: n, startLine, stopLine, lfp
+      character(len=*), intent(inout) :: resArr(n)
+      character(len=lfp), intent(in) :: filePath
+      character(len=10) :: v
+
+      ! print*, "readLines:", startLine, stopLine
+      open(newunit=io, file=filePath, status="old", action="read")
+      do i = 1, stopLine
+         read(io, *) v
+         if(i .ge. startLine) then
+            resArr(i-startLine+1) = v
+            ! print*, "i:", i, i-startLine+1, v
+         ! else
+         !    print*, "i:", i, v
+         end if
+      end do
+   end subroutine readLines
 
    subroutine readStringArray(resVector, n, filePath, lfp)
       integer :: io
